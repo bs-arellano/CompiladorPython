@@ -12,7 +12,7 @@ namespace CompiladorPython
         {
 
         }
-
+        //Lanza explorador de windows
         private void openBttn_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
