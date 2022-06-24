@@ -34,10 +34,24 @@ namespace CompiladorPython
             Lexico.Lexico analizadorLexico = new Lexico.Lexico();
             analizadorLexico.Analizar(selectedFileURL);
             ArrayList tokens = analizadorLexico.getTokens();
+
+            tokensList.Visible = true;
+            tokensList.Columns.Clear();
+            tokensList.Rows.Clear();
+
+            tokensList.Columns.Add("Key", "Key");
+            tokensList.Columns.Add("KeyType", "Key Type");
+
+            foreach ( Tuple<string, string> token in tokens)
+            {
+                tokensList.Rows.Add(new Object[] { token.Item1.ToString(), token.Item2.ToString() });
+            }
+
             if (tokens.Count > 0)
             {
                 labelLexico.ForeColor = System.Drawing.Color.Green;
             }
         }
+
     }
 }
