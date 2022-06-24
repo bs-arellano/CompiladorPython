@@ -15,6 +15,7 @@ namespace Sintactico
             ArrayList tokens = t;
             for(int i = 0; i<tokens.Count-1; i++)
             {
+                //Condicional if
                 if(((Tuple<string, string>) tokens[i]).Item2 == "ID510")
                 {
                     if(((Tuple<string, string>) tokens[i+1]).Item2 != "Variable")
@@ -37,6 +38,52 @@ namespace Sintactico
                         || ((Tuple<string, string>) tokens[i+2]).Item2 == "NOTEQUAL"
                         || ((Tuple<string, string>) tokens[i+2]).Item2 == "LESSEQUAL"
                         || ((Tuple<string, string>) tokens[i+2]).Item2 == "GREATEREQUAL")
+                    {} else {
+                        correcto = false;
+                    }  
+                }
+
+                //Bucle for
+                if(((Tuple<string, string>) tokens[i]).Item2 == "ID517")
+                {
+                    if(((Tuple<string, string>) tokens[i+1]).Item2 != "Variable")
+                    {
+                        correcto = false;
+                    }
+
+                    if(((Tuple<string, string>) tokens[i+3]).Item2 != "Variable")
+                    {
+                        correcto = false;
+                    }
+
+                    if(((Tuple<string, string>) tokens[i+4]).Item2 != "COLON")
+                    {
+                        correcto = false;
+                    }
+                    if(((Tuple<string, string>) tokens[i+2]).Item2 == "ID518")
+                    {} else {
+                        correcto = false;
+                    }  
+                }
+
+                //Funciones
+                if(((Tuple<string, string>) tokens[i]).Item2 == "ID526")
+                {
+                    if(((Tuple<string, string>) tokens[i+1]).Item2 != "Variable")
+                    {
+                        correcto = false;
+                    }
+
+                    if(((Tuple<string, string>) tokens[i+2]).Item2 != "LPAR")
+                    {
+                        correcto = false;
+                    }
+
+                    if(((Tuple<string, string>) tokens[i+3]).Item2 != "RPAR")
+                    {
+                        correcto = false;
+                    }
+                    if(((Tuple<string, string>) tokens[i+4]).Item2 == "COLON")
                     {} else {
                         correcto = false;
                     }  
