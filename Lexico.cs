@@ -6,20 +6,21 @@ using System.Collections;
 
 namespace Lexico
 {
-    class main
+    class Lexico
     {
-        static void Main(String[] args)
+        private ArrayList tokens;
+        public void Analizar(String url)
         {
             //Instancia de la clase Identificador
             Identificador identificador = new Identificador();
-            Tokenizer tokenizer = new Tokenizer();
+            
             //Lee el codigo fuente
             Console.WriteLine("*******************");
-            string codigo = File.ReadAllText("test.py");
+            string codigo = File.ReadAllText(url);
             Console.WriteLine(codigo);
             Console.WriteLine("*******************");
             //Lista de tokens identificados
-            ArrayList tokens = new ArrayList();
+            tokens = new ArrayList();
             string word = "";
             string ultimo = "";
             char anterior = ' ';
@@ -72,12 +73,16 @@ namespace Lexico
                 }
                 anterior = c;
             }
-            //Imprime lista de tokens identificados
+        }
+        public ArrayList getTokens()
+        {
+            Tokenizer tokenizer = new Tokenizer();
+            ArrayList tokensIdentificados = new ArrayList();
             foreach (string t in tokens)
             {
-                Console.WriteLine(t+"   "+tokenizer.getToken(t));
+                tokensIdentificados.Add(Tuple.Create(t, tokenizer.getToken(t)));
             }
-            Console.ReadKey();
+            return tokensIdentificados;
         }
     }
     class Identificador

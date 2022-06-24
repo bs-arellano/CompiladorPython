@@ -1,3 +1,6 @@
+using Lexico;
+using System.Collections;
+
 namespace CompiladorPython
 {
     public partial class VentanaPrincipal : Form
@@ -26,14 +29,15 @@ namespace CompiladorPython
             }
         }
 
-        private void showCodeBttn_Click(object sender, EventArgs e)
+        private void compilarBtn_Click(object sender, EventArgs e)
         {
-            
-        }
-
-        private void showTableBttn_Click(object sender, EventArgs e)
-        {
-
+            Lexico.Lexico analizadorLexico = new Lexico.Lexico();
+            analizadorLexico.Analizar(selectedFileURL);
+            ArrayList tokens = analizadorLexico.getTokens();
+            if (tokens.Count > 0)
+            {
+                labelLexico.ForeColor = System.Drawing.Color.Green;
+            }
         }
     }
 }

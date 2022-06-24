@@ -32,8 +32,8 @@
             this.opnBttn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textPath = new System.Windows.Forms.TextBox();
-            this.showCodeBttn = new System.Windows.Forms.Button();
-            this.showTableBttn = new System.Windows.Forms.Button();
+            this.compilarBtn = new System.Windows.Forms.Button();
+            this.labelLexico = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // opnBttn
@@ -63,33 +63,32 @@
             this.textPath.Size = new System.Drawing.Size(525, 23);
             this.textPath.TabIndex = 2;
             // 
-            // showCodeBttn
+            // compilarBtn
             // 
-            this.showCodeBttn.Location = new System.Drawing.Point(26, 52);
-            this.showCodeBttn.Name = "showCodeBttn";
-            this.showCodeBttn.Size = new System.Drawing.Size(110, 23);
-            this.showCodeBttn.TabIndex = 3;
-            this.showCodeBttn.Text = "Mostrar codigo";
-            this.showCodeBttn.UseVisualStyleBackColor = true;
-            this.showCodeBttn.Click += new System.EventHandler(this.showCodeBttn_Click);
+            this.compilarBtn.Location = new System.Drawing.Point(26, 52);
+            this.compilarBtn.Name = "compilarBtn";
+            this.compilarBtn.Size = new System.Drawing.Size(110, 23);
+            this.compilarBtn.TabIndex = 3;
+            this.compilarBtn.Text = "Compilar";
+            this.compilarBtn.UseVisualStyleBackColor = true;
+            this.compilarBtn.Click += new System.EventHandler(this.compilarBtn_Click);
             // 
-            // showTableBttn
+            // labelLexico
             // 
-            this.showTableBttn.Location = new System.Drawing.Point(145, 52);
-            this.showTableBttn.Name = "showTableBttn";
-            this.showTableBttn.Size = new System.Drawing.Size(165, 23);
-            this.showTableBttn.TabIndex = 4;
-            this.showTableBttn.Text = "Mostrar tabla de simbolos";
-            this.showTableBttn.UseVisualStyleBackColor = true;
-            this.showTableBttn.Click += new System.EventHandler(this.showTableBttn_Click);
+            this.labelLexico.AutoSize = true;
+            this.labelLexico.Location = new System.Drawing.Point(26, 107);
+            this.labelLexico.Name = "labelLexico";
+            this.labelLexico.Size = new System.Drawing.Size(97, 15);
+            this.labelLexico.TabIndex = 4;
+            this.labelLexico.Text = "Analizador lexico";
             // 
             // VentanaPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.showTableBttn);
-            this.Controls.Add(this.showCodeBttn);
+            this.Controls.Add(this.labelLexico);
+            this.Controls.Add(this.compilarBtn);
             this.Controls.Add(this.textPath);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.opnBttn);
@@ -107,7 +106,7 @@
         private Button opnBttn;
         private Label label1;
         private TextBox textPath;
-        private Button showCodeBttn;
-        private Button showTableBttn;
+        private Button compilarBtn;
+        private Label labelLexico;
     }
 }
