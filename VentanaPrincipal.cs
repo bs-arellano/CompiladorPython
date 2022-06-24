@@ -35,6 +35,9 @@ namespace CompiladorPython
             analizadorLexico.Analizar(selectedFileURL);
             ArrayList tokens = analizadorLexico.getTokens();
 
+            Sintactico.Sintactico analizadorSintactico = new Sintactico.Sintactico();
+            analizadorSintactico.Analizar(tokens);
+
             tokensList.Visible = true;
             tokensList.Columns.Clear();
             tokensList.Rows.Clear();
@@ -50,6 +53,10 @@ namespace CompiladorPython
             if (tokens.Count > 0)
             {
                 labelLexico.ForeColor = System.Drawing.Color.Green;
+            }
+            if(analizadorSintactico.getCorrecto() == true)
+            {
+                labelLexico.ForeColor = System.Drawing.Color.Blue;
             }
         }
 
