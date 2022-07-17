@@ -1,6 +1,14 @@
+//Brayan Arellano - 20191020151
+//Jesus Lozada - 20191020098
+//Juan Hurtado - 20191020082
+
+//Fases del compilador
 using Lexico;
+using Sintactico;
+
 using System.Collections;
 
+//ventana Principal
 namespace CompiladorPython
 {
     public partial class VentanaPrincipal : Form
@@ -28,32 +36,38 @@ namespace CompiladorPython
                 }
             }
         }
-
+        //Boton para compilar, 
         private void compilarBtn_Click(object sender, EventArgs e)
         {
+            //Genera nueva instancia del analizador lexico
             Lexico.Lexico analizadorLexico = new Lexico.Lexico();
+            //Pasa el archivo seleccionado y obtiene los tokens identificados
             analizadorLexico.Analizar(selectedFileURL);
             ArrayList tokens = analizadorLexico.getTokens();
 
+            //Intancia del analizador sintactico
             Sintactico.Sintactico analizadorSintactico = new Sintactico.Sintactico();
+            //Analiza sintacticamente los tokens obtenidos
             analizadorSintactico.Analizar(tokens);
 
+            //Muestra la tabla de tokens identificados
             tokensList.Visible = true;
+            //Limpia la tabla
             tokensList.Columns.Clear();
             tokensList.Rows.Clear();
-
+            //Añade los tokens
             tokensList.Columns.Add("Key", "Key");
             tokensList.Columns.Add("KeyType", "Key Type");
-
             foreach ( Tuple<string, string> token in tokens)
             {
                 tokensList.Rows.Add(new Object[] { token.Item1.ToString(), token.Item2.ToString() });
             }
-
+            //Si el analizador lexico ha generado tokens
             if (tokens.Count > 0)
             {
                 labelLexico.ForeColor = System.Drawing.Color.Green;
             }
+            //Si el programa es sintacticamente correcto
             if(analizadorSintactico.getCorrecto() == true)
             {
                 labelLexico.ForeColor = System.Drawing.Color.Blue;

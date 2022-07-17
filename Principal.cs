@@ -1,15 +1,16 @@
+//Brayan Arellano - 20191020151
+//Jesus Lozada - 20191020098
+//Juan Hurtado - 20191020082
+
+//Compilador de Python3
 namespace CompiladorPython
 {
     internal static class Principal
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
+        /// Inicia la interfaz grafica
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new VentanaPrincipal());
         }

@@ -5,6 +5,7 @@
 using System;
 using System.Collections;
 
+//Fase de analisis sintactico
 namespace Sintactico
 {
     class Sintactico

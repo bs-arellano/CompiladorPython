@@ -123,7 +123,7 @@
         }
 
         #endregion
-
+        //Elementos de la interfaz
         private Button opnBttn;
         private Label label1;
         private TextBox textPath;

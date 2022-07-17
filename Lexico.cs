@@ -1,24 +1,25 @@
 ﻿//Brayan Arellano - 20191020151
 //Jesus Lozada - 20191020098
 //Juan Hurtado - 20191020082
+
 using System;
 using System.Collections;
 
+//Fase de analizador lexico
 namespace Lexico
 {
+    //Clase responsable de recorrer secuencialmete un archivo Python e identidicar los tokens presentes
     class Lexico
     {
+        //Arreglo que almacena los tokens identificados en la fase
         private ArrayList tokens;
+        //Metodo principal para analizar secuencialmente el archivo
         public void Analizar(String url)
         {
             //Instancia de la clase Identificador
             Identificador identificador = new Identificador();
-            
             //Lee el codigo fuente
-            Console.WriteLine("*******************");
             string codigo = File.ReadAllText(url);
-            Console.WriteLine(codigo);
-            Console.WriteLine("*******************");
             //Lista de tokens identificados
             tokens = new ArrayList();
             string word = "";
@@ -74,6 +75,7 @@ namespace Lexico
                 anterior = c;
             }
         }
+        //Devuelve los tokens almacenados en el arreglo 'tokens'
         public ArrayList getTokens()
         {
             Tokenizer tokenizer = new Tokenizer();
@@ -85,6 +87,7 @@ namespace Lexico
             return tokensIdentificados;
         }
     }
+    //Clasifica cada caracter en una categoria: letra, numero o simbolo
     class Identificador
     {
         public Boolean esLetra(char c)
@@ -127,8 +130,10 @@ namespace Lexico
             else return false;
         }
     }
+    //Para cada palabra identificada asigna el token correspondiente
     class Tokenizer
     {
+        //Diccionario que almacena todas las palabras y operadores de Python junto con su correspondiente token
         Dictionary<string, string> tokens = new Dictionary<string, string>()
         {
             //Keywords
