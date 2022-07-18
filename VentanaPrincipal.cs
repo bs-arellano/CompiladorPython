@@ -49,6 +49,7 @@ namespace CompiladorPython
             Sintactico.Sintactico analizadorSintactico = new Sintactico.Sintactico();
             //Analiza sintacticamente los tokens obtenidos
             analizadorSintactico.Analizar(tokens);
+            analizadorSintactico.getArbol().imprimir();
 
             //Muestra la tabla de tokens identificados
             tokensList.Visible = true;

@@ -10,90 +10,147 @@ namespace Sintactico
 {
     class Sintactico
     {
+        ArbolSintactico arbol;
         bool correcto = true;
-        public void Analizar(ArrayList t)
+        public void Analizar(ArrayList tokens)
         {
-            ArrayList tokens = t;
-            for(int i = 0; i<tokens.Count-1; i++)
-            {
-                //Condicional if
-                if(((Tuple<string, string>) tokens[i]).Item2 == "ID510")
+            arbol = new ArbolSintactico(Tuple.Create("Codigo Python", "root"));
+            //Almacena temporalmente los tokens de tipo operador y operando
+            Stack<Tuple<string, string>> operadores = new Stack<Tuple<string, string>>();
+            Stack<Tuple<string, string>> operandos = new Stack<Tuple<string, string>>();
+            Nodo actual = arbol.getRoot();
+            foreach (Tuple<string, string> t in tokens){
+                if (esFuncion(t.Item2))
                 {
-                    if(((Tuple<string, string>) tokens[i+1]).Item2 != "Variable")
-                    {
-                        correcto = false;
-                    }
-
-                    if(((Tuple<string, string>) tokens[i+3]).Item2 != "Variable")
-                    {
-                        correcto = false;
-                    }
-
-                    if(((Tuple<string, string>) tokens[i+4]).Item2 != "COLON")
-                    {
-                        correcto = false;
-                    }
-                    if(((Tuple<string, string>) tokens[i+2]).Item2 == "EQEQUAL"
-                        || ((Tuple<string, string>) tokens[i+2]).Item2 == "LESS"
-                        || ((Tuple<string, string>) tokens[i+2]).Item2 == "GREATER"
-                        || ((Tuple<string, string>) tokens[i+2]).Item2 == "NOTEQUAL"
-                        || ((Tuple<string, string>) tokens[i+2]).Item2 == "LESSEQUAL"
-                        || ((Tuple<string, string>) tokens[i+2]).Item2 == "GREATEREQUAL")
-                    {} else {
-                        correcto = false;
-                    }  
+                    Nodo funcion = new Nodo(t);
+                    actual.addNodo(funcion);
+                    actual = funcion;
                 }
-
-                //Bucle for
-                if(((Tuple<string, string>) tokens[i]).Item2 == "ID517")
+                //Abre o cierra funcion
+                else if (t.Item2 == "LBRACE")
                 {
-                    if(((Tuple<string, string>) tokens[i+1]).Item2 != "Variable")
-                    {
-                        correcto = false;
-                    }
-
-                    if(((Tuple<string, string>) tokens[i+3]).Item2 != "Variable")
-                    {
-                        correcto = false;
-                    }
-
-                    if(((Tuple<string, string>) tokens[i+4]).Item2 != "COLON")
-                    {
-                        correcto = false;
-                    }
-                    if(((Tuple<string, string>) tokens[i+2]).Item2 == "ID518")
-                    {} else {
-                        correcto = false;
-                    }  
+                    actual = actual.getHijos().Last();
                 }
-
-                //Funciones
-                if(((Tuple<string, string>) tokens[i]).Item2 == "ID526")
+               else if (t.Item2 == "RBRACE")
                 {
-                    if(((Tuple<string, string>) tokens[i+1]).Item2 != "Variable")
+                    actual = actual.getPadre();
+                }
+                //Abre o cierra expresion
+                else if (t.Item2 == "RPAR")
+                {
+                    
+                }
+                else if (t.Item2 == "LPAR")
+                {
+                    
+                }
+                //Almacena operador y operandos
+                else if (esOperador(t.Item2))
+                {
+                    operadores.Push(t);
+                }
+                else
+                {
+                    operandos.Push(t);
+                    if (operandos.Count == 2 & operadores.Count == 1)
                     {
-                        correcto = false;
+                        //Crea nodos de los tokens almacenados temporalmente
+                        Nodo operador = new Nodo(operadores.Pop());
+                        Nodo op2 = new Nodo(operandos.Pop());
+                        Nodo op1 = new Nodo(operandos.Pop());
+                        //Añade el operador y los operandos al nodo actual
+                        operador.addNodo(op1);
+                        operador.addNodo(op2);
+                        actual.addNodo(operador);
                     }
-
-                    if(((Tuple<string, string>) tokens[i+2]).Item2 != "LPAR")
-                    {
-                        correcto = false;
-                    }
-
-                    if(((Tuple<string, string>) tokens[i+3]).Item2 != "RPAR")
-                    {
-                        correcto = false;
-                    }
-                    if(((Tuple<string, string>) tokens[i+4]).Item2 == "COLON")
-                    {} else {
-                        correcto = false;
-                    }  
                 }
             }
         }
+        //Clasifica un token dado como operador
+        public bool esOperador(String token)
+        {
+            string[] operadores = {"AMPER", "PERCENT", "STAR", "PLUS", "MINUS", "SLASH", "DOT",
+                "COLON", "LESS", "EQUAL", "GREATER", "CIRCUMFLEX", "NOTEQUAL", "DOUBLESTAR", "STAREQUAL",
+                "PLUSEQUAL", "MINEQUAL", "SLASHEQUAL", "EQEQUAL", "ID518"};
+            return operadores.Contains(token) ;
+        }
+        //Clasifica un token dado como funcion
+        public bool esFuncion(String token)
+        {
+            string[] funciones = { "ID510", "ID530", "ID517", "ID516"};
+            return funciones.Contains(token) ;
+        }
+        //Retorna el resultadfo del analisis sintactico
         public bool getCorrecto()
         {
             return correcto;
+        }
+        //Retorna el arbol sintactico
+        public ArbolSintactico getArbol()
+        {
+            return arbol;
+        }
+    }
+
+    class ArbolSintactico
+    {
+        Nodo raiz;
+        //Constructor requiere un nodo raiz
+        public ArbolSintactico(Tuple<string, string> root)
+        {
+            raiz = new Nodo(root);
+        }
+        //Devuelve el nodo raiz del arbol
+        public Nodo getRoot()
+        {
+            return raiz;
+        }
+        //Devuelve un string con el arbol
+        public async void imprimir()
+        {
+            String texto = raiz.printNodo("");
+            await File.WriteAllTextAsync(@"d:\ArbolSintactico_Log.txt", texto);
+        }
+    }
+
+    class Nodo
+    {
+        Tuple<string, string> valor;
+        Nodo padre;
+        List<Nodo> hijos = new List<Nodo>();
+        //Metodo constructor
+        public Nodo(Tuple<string, string> valor)
+        {
+            this.valor = valor;
+        }
+        //Nodo padre
+        public void setPadre(Nodo valor)
+        {
+            this.padre = valor;
+        }
+        public Nodo getPadre()
+        {
+            return padre;
+        } 
+        //Nodos hijos
+        public void addNodo(Nodo valor)
+        {
+            hijos.Add(valor);
+            valor.setPadre(this);
+        }
+        public List<Nodo> getHijos()
+        {
+            return hijos;
+        }
+        //imprimir nodo
+        public String printNodo(String prefijo)
+        {
+            String respuesta = prefijo+this.valor.Item1+"\n";
+            foreach (Nodo hijo in hijos)
+            {
+                respuesta += hijo.printNodo(prefijo+'-');
+            }
+            return respuesta;
         }
     }
 }
