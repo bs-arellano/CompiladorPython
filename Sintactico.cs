@@ -24,7 +24,6 @@ namespace Sintactico
                 {
                     Nodo funcion = new Nodo(t);
                     actual.addNodo(funcion);
-                    actual = funcion;
                 }
                 //Abre o cierra funcion
                 else if (t.Item2 == "LBRACE")

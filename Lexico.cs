@@ -127,6 +127,10 @@ namespace Lexico
             {
                 return true;
             }
+            else if (c>=123 && c<=126)
+            {
+                return true;
+            }
             else return false;
         }
     }
