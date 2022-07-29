@@ -2,7 +2,7 @@ num = 29
 
 flag = False
 
-if num > 1{
+if num > 1 {
     for i in num{
         if num == 0{
             flag = True
@@ -10,9 +10,11 @@ if num > 1{
         }
     }
 }
-if flag{
+
+if flag {
     print(num, "is not a prime number")
 }
-else{
+
+else {
     print(num, "is a prime number")
 }

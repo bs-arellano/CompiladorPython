@@ -19,38 +19,71 @@ namespace Sintactico
             Stack<Tuple<string, string>> operadores = new Stack<Tuple<string, string>>();
             Stack<Tuple<string, string>> operandos = new Stack<Tuple<string, string>>();
             Nodo actual = arbol.getRoot();
+            bool breakActivo = false;
             foreach (Tuple<string, string> t in tokens){
-                if (esFuncion(t.Item2))
+                if (esFuncion(t.Item2) && !breakActivo)
                 {
                     Nodo funcion = new Nodo(t);
                     actual.addNodo(funcion);
+
+                    if (t.Item2 == "ID506")
+                    {
+                        breakActivo = true;
+                    }
                 }
                 //Abre o cierra funcion
-                else if (t.Item2 == "LBRACE")
+                else if (t.Item2 == "LBRACE" && !breakActivo)
                 {
+                    
                     actual = actual.getHijos().Last();
+
+                    if (actual.getValor().Item2 == "ID510" && operandos.Count == 1)
+                    {
+                        //actual = actual.getPadre();
+
+                        operandos.Push(Tuple.Create("True", "ID524"));
+                        operadores.Push(Tuple.Create("==", "EQEQUAL"));
+
+                        if (operandos.Count == 2 & operadores.Count == 1)
+                        {
+                            //Crea nodos de los tokens almacenados temporalmente
+                            Nodo operador = new Nodo(operadores.Pop());
+                            Nodo op2 = new Nodo(operandos.Pop());
+                            Nodo op1 = new Nodo(operandos.Pop());
+                            //Añade el operador y los operandos al nodo actual
+                            operador.addNodo(op1);
+                            operador.addNodo(op2);
+                            actual.addNodo(operador);
+                        }
+                    }
                 }
                else if (t.Item2 == "RBRACE")
                 {
                     actual = actual.getPadre();
+
+                    if (breakActivo)
+                    {
+                        breakActivo = false;
+                    }
                 }
                 //Abre o cierra expresion
-                else if (t.Item2 == "RPAR")
+                else if (t.Item2 == "RPAR" && !breakActivo)
                 {
                     
                 }
-                else if (t.Item2 == "LPAR")
+                else if (t.Item2 == "LPAR" && !breakActivo)
                 {
                     
                 }
                 //Almacena operador y operandos
-                else if (esOperador(t.Item2))
+                else if (esOperador(t.Item2) && !breakActivo)
                 {
                     operadores.Push(t);
                 }
-                else
+                else if (!breakActivo)
                 {
                     operandos.Push(t);
+                    System.Diagnostics.Debug.WriteLine(t.Item1);
                     if (operandos.Count == 2 & operadores.Count == 1)
                     {
                         //Crea nodos de los tokens almacenados temporalmente
@@ -76,7 +109,7 @@ namespace Sintactico
         //Clasifica un token dado como funcion
         public bool esFuncion(String token)
         {
-            string[] funciones = { "ID510", "ID530", "ID517", "ID516"};
+            string[] funciones = { "ID510", "ID530", "ID517", "ID516", "ID506", "ID51"};
             return funciones.Contains(token) ;
         }
         //Retorna el resultadfo del analisis sintactico
@@ -150,6 +183,10 @@ namespace Sintactico
                 respuesta += hijo.printNodo(prefijo+'-');
             }
             return respuesta;
+        }
+        public Tuple<string, string> getValor()
+        {
+            return this.valor;
         }
     }
 }
