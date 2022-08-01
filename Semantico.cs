@@ -5,16 +5,16 @@ namespace Semantico
 {
     class Semantico
     {
+        //Lista de los tokens y sus tipos
+        ArrayList tipos = new ArrayList();
         public bool AnalizarTipos(ArrayList tokens, ArbolSintactico arbol)
         {
-            bool correcto = true;
             //Asigna un tipo a cada variable
-            ArrayList tipos = new ArrayList();
             foreach(Tuple<string, string> t in tokens)
             {
                 if (t.Item2 == "Variable")
                 {
-                    if (t.Item1[0] == '"' & t.Item2[t.Item2.Length-1]=='"')
+                    if (t.Item1[0] == '"' & t.Item1[t.Item1.Length-1]=='"')
                     {
                         tipos.Add(Tuple.Create(t.Item1,"String"));
                     }
@@ -66,8 +66,74 @@ namespace Semantico
                 }
             }
             //Recorre el arbol recursivamente
-            
-            return correcto;
+            return compConsistencia(arbol.getRoot()); ;
+        }
+        public async void imprimirTipos()
+        {
+            String texto = "";
+            foreach(Tuple<String,String> tupla in tipos)
+            {
+                texto += tupla.Item1 + " " + tupla.Item2 + "\n";
+            }
+            await File.WriteAllTextAsync(@"d:\TablaSemantica.txt", texto);
+        }
+        bool compConsistencia(Nodo nodo)
+        {
+            //Si el nodo actual es un operador
+            if (nodo.getValor().Item1 == "=")
+            {
+                String tipo = "";
+                //Revisa los nodos hijos del operador
+                foreach(Nodo hijo in nodo.getHijos())
+                {
+                    //Busca el token en la lista de tipos
+                    for (int i = 0; i < tipos.Count; i++)
+                    {
+                        //Recupera la tupla en la posicion i
+                        Tuple<String, String> tupla = (Tuple < String, String>) tipos[i];
+                        if (tupla.Item1 == hijo.getValor().Item1)
+                        {
+                            //Si no hay un tipo asiganado
+                            if (tipo == "")
+                            {
+                                if (tupla.Item2 != "Variable")
+                                {
+                                    tipo = tupla.Item2;
+                                }
+                            }
+                            //Si no coinciden los tipos retorna falso a menos que sea una variable sin tipo
+                            else if (tipo != tupla.Item2)
+                            {
+                                if (tupla.Item2 == "Variable")
+                                {
+                                    tupla = Tuple.Create("Hola", "Que tal");
+                                }
+                                else
+                                {
+                                    return false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            //Si no es operador comprueba consistencia de los hijos
+            else
+            {
+                bool consistente=true;
+                foreach(Nodo hijo in nodo.getHijos())
+                {
+                    consistente = compConsistencia(hijo);
+                    if (!consistente)
+                    {
+                        return false;
+                        break;
+                    }
+                }
+                return consistente;
+            }
         }
     }
 }

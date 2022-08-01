@@ -56,13 +56,14 @@ namespace CompiladorPython
             //Analiza sintacticamente los tokens obtenidos y obtiene el arbol
             analizadorSintactico.Analizar(tokens);
             ArbolSintactico arbol = analizadorSintactico.getArbol();
+            arbol.imprimir();
             //Analiza semanticamenta la consistencia de tipos
             Semantico.Semantico analizadorSemantico = new Semantico.Semantico();
             if(!analizadorSemantico.AnalizarTipos(tokens, arbol))
             {
                 MessageBox.Show("Error en tipos");
             }
-            
+            analizadorSemantico.imprimirTipos();
             //Muestra la tabla de tokens identificados
             tokensList.Visible = true;
             //Limpia la tabla
