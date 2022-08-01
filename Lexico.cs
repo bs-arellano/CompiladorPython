@@ -12,7 +12,7 @@ namespace Lexico
     class Lexico
     {
         //Arreglo que almacena los tokens identificados en la fase
-        private ArrayList tokens;
+        private ArrayList tokens = new ArrayList();
         //Metodo principal para analizar secuencialmente el archivo
         public void Analizar(String url)
         {
@@ -20,8 +20,7 @@ namespace Lexico
             Identificador identificador = new Identificador();
             //Lee el codigo fuente
             string codigo = File.ReadAllText(url);
-            //Lista de tokens identificados
-            tokens = new ArrayList();
+            //Variables temporales
             string word = "";
             string ultimo = "";
             char anterior = ' ';

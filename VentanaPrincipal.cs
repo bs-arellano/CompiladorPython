@@ -42,15 +42,27 @@ namespace CompiladorPython
             //Genera nueva instancia del analizador lexico
             Lexico.Lexico analizadorLexico = new Lexico.Lexico();
             //Pasa el archivo seleccionado y obtiene los tokens identificados
-            analizadorLexico.Analizar(selectedFileURL);
+            try
+            {
+                analizadorLexico.Analizar(selectedFileURL);
+            }
+            catch(ArgumentException)
+            {
+                MessageBox.Show("Por favor ingrese una direccion valida");
+            }
             ArrayList tokens = analizadorLexico.getTokens();
-
             //Intancia del analizador sintactico
             Sintactico.Sintactico analizadorSintactico = new Sintactico.Sintactico();
-            //Analiza sintacticamente los tokens obtenidos
+            //Analiza sintacticamente los tokens obtenidos y obtiene el arbol
             analizadorSintactico.Analizar(tokens);
-            analizadorSintactico.getArbol().imprimir();
-
+            ArbolSintactico arbol = analizadorSintactico.getArbol();
+            //Analiza semanticamenta la consistencia de tipos
+            Semantico.Semantico analizadorSemantico = new Semantico.Semantico();
+            if(!analizadorSemantico.AnalizarTipos(tokens, arbol))
+            {
+                MessageBox.Show("Error en tipos");
+            }
+            
             //Muestra la tabla de tokens identificados
             tokensList.Visible = true;
             //Limpia la tabla

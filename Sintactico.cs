@@ -19,71 +19,51 @@ namespace Sintactico
             Stack<Tuple<string, string>> operadores = new Stack<Tuple<string, string>>();
             Stack<Tuple<string, string>> operandos = new Stack<Tuple<string, string>>();
             Nodo actual = arbol.getRoot();
-            bool breakActivo = false;
-            foreach (Tuple<string, string> t in tokens){
-                if (esFuncion(t.Item2) && !breakActivo)
+            foreach (Tuple<string, string> t in tokens)
+            {
+                if (esFuncion(t.Item2))
                 {
                     Nodo funcion = new Nodo(t);
                     actual.addNodo(funcion);
-
-                    if (t.Item2 == "ID506")
-                    {
-                        breakActivo = true;
-                    }
                 }
                 //Abre o cierra funcion
-                else if (t.Item2 == "LBRACE" && !breakActivo)
+                else if (t.Item2 == "LBRACE")
                 {
-                    
                     actual = actual.getHijos().Last();
-
-                    if (actual.getValor().Item2 == "ID510" && operandos.Count == 1)
-                    {
-                        //actual = actual.getPadre();
-
-                        operandos.Push(Tuple.Create("True", "ID524"));
-                        operadores.Push(Tuple.Create("==", "EQEQUAL"));
-
-                        if (operandos.Count == 2 & operadores.Count == 1)
-                        {
-                            //Crea nodos de los tokens almacenados temporalmente
-                            Nodo operador = new Nodo(operadores.Pop());
-                            Nodo op2 = new Nodo(operandos.Pop());
-                            Nodo op1 = new Nodo(operandos.Pop());
-                            //Añade el operador y los operandos al nodo actual
-                            operador.addNodo(op1);
-                            operador.addNodo(op2);
-                            actual.addNodo(operador);
-                        }
-                    }
                 }
-               else if (t.Item2 == "RBRACE")
+                else if (t.Item2 == "RBRACE")
                 {
                     actual = actual.getPadre();
-
-                    if (breakActivo)
-                    {
-                        breakActivo = false;
-                    }
                 }
                 //Abre o cierra expresion
-                else if (t.Item2 == "RPAR" && !breakActivo)
+                else if (t.Item2 == "LPAR")
                 {
-                    
+                    if (esFuncion(actual.getHijos().Last().getValor().Item2))
+                    {
+                        actual = actual.getHijos().Last();
+                    }
+
                 }
-                else if (t.Item2 == "LPAR" && !breakActivo)
+                else if (t.Item2 == "RPAR")
                 {
-                    
+                    if (esFuncion(actual.getValor().Item2))
+                    {
+
+                        for (int i = 0; i < operandos.Count(); i++)
+                        {
+                            actual.addNodo(new Nodo(operandos.Pop()));
+                        }
+                        actual = actual.getPadre();
+                    }
                 }
                 //Almacena operador y operandos
-                else if (esOperador(t.Item2) && !breakActivo)
+                else if (esOperador(t.Item2))
                 {
                     operadores.Push(t);
                 }
-                else if (!breakActivo)
+                else
                 {
                     operandos.Push(t);
-                    System.Diagnostics.Debug.WriteLine(t.Item1);
                     if (operandos.Count == 2 & operadores.Count == 1)
                     {
                         //Crea nodos de los tokens almacenados temporalmente

@@ -2,19 +2,19 @@ num = 29
 
 flag = False
 
-if num > 1 {
+if (num > 1) {
     for i in num{
-        if num == 0{
+        if (num == 0){
             flag = True
             break
         }
     }
 }
 
-if flag {
-    print(num, "is not a prime number")
+if (flag) {
+    print(num + "is not a prime number")
 }
 
 else {
-    print(num, "is a prime number")
+    print(num + "is a prime number")
 }
