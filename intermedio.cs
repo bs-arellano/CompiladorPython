@@ -1,4 +1,6 @@
-﻿namespace Intermedio
+﻿using System.Diagnostics;
+
+namespace Intermedio
 {
     class Intermedio
     {
@@ -8,7 +10,12 @@
         public void generar(Sintactico.ArbolSintactico arbol)
         {
             leerOperacion(arbol.getRoot());
-            File.WriteAllTextAsync(@"d:\CodigoIntermedio.txt", texto);
+            File.WriteAllText(@"A:\CodigoIntermedio.txt", texto + '\n' + "DICCIONARIO DE VARIABLES: \n");
+            foreach (string key in variables.Keys) 
+            {
+                File.AppendAllText(@"A:\CodigoIntermedio.txt", variables[key] + " : " + key + '\n');
+            }
+
         }
         string RevisarDiccionario(string t)
         {
