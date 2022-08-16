@@ -21,30 +21,47 @@ namespace Sintactico
             Nodo actual = arbol.getRoot();
             foreach (Tuple<string, string> t in tokens)
             {
+                //Limpia pilas de operaciones
+                if (!esOperador(t.Item2))
+                {
+                    if (operandos.Count==2 && operadores.Count == 1)
+                    {
+                        Nodo op = new Nodo(operadores.Pop());
+                        Nodo op2 = new Nodo(operandos.Pop());
+                        Nodo op1 = new Nodo(operandos.Pop());
+                        op.addNodo(op1);
+                        op.addNodo(op2);
+                        actual.addNodo(op);
+                    }
+                }
+                //Funcion if for
                 if (esFuncion(t.Item2))
                 {
                     Nodo funcion = new Nodo(t);
                     actual.addNodo(funcion);
+                    continue;
                 }
                 //Abre o cierra funcion
-                else if (t.Item2 == "LBRACE")
+                if (t.Item2 == "LBRACE")
                 {
                     actual = actual.getHijos().Last();
+                    continue;
                 }
-                else if (t.Item2 == "RBRACE")
+                if (t.Item2 == "RBRACE")
                 {
                     actual = actual.getPadre();
+                    continue;
                 }
                 //Abre o cierra expresion
-                else if (t.Item2 == "LPAR")
+                if (t.Item2 == "LPAR")
                 {
                     if (esFuncion(actual.getHijos().Last().getValor().Item2))
                     {
                         actual = actual.getHijos().Last();
                     }
-
+                    continue;
                 }
-                else if (t.Item2 == "RPAR")
+                if (t.Item2 == "RPAR")
                 {
                     if (esFuncion(actual.getValor().Item2))
                     {
@@ -55,27 +72,54 @@ namespace Sintactico
                         }
                         actual = actual.getPadre();
                     }
+                    continue;
                 }
                 //Almacena operador y operandos
-                else if (esOperador(t.Item2))
+                if (esOperador(t.Item2))
                 {
                     operadores.Push(t);
+                    continue;
                 }
                 else
                 {
-                    operandos.Push(t);
-                    if (operandos.Count == 2 & operadores.Count == 1)
+                    if (operandos.Count <= 1)
                     {
-                        //Crea nodos de los tokens almacenados temporalmente
-                        Nodo operador = new Nodo(operadores.Pop());
-                        Nodo op2 = new Nodo(operandos.Pop());
-                        Nodo op1 = new Nodo(operandos.Pop());
-                        //Añade el operador y los operandos al nodo actual
-                        operador.addNodo(op1);
-                        operador.addNodo(op2);
-                        actual.addNodo(operador);
+                        operandos.Push(t);
+                        continue;
+                    }
+                    if (operandos.Count == 2 && operadores.Count == 2)
+                    {
+                        operandos.Push(t);
+                        Nodo op2 = new Nodo(operadores.Pop());
+                        Nodo opn3 = new Nodo(operandos.Pop());
+                        Nodo opn2 = new Nodo(operandos.Pop());
+                        op2.addNodo(opn2);
+                        op2.addNodo(opn3);
+                        Nodo op1 = new Nodo(operadores.Pop());
+                        Nodo opn1 = new Nodo(operandos.Pop());
+                        op1.addNodo(opn1);
+                        op1.addNodo(op2);
+                        actual.addNodo(op1);
+                        continue;
                     }
                 }
+            }
+            if (operandos.Count == 2 && operadores.Count == 1)
+            {
+                Nodo op = new Nodo(operadores.Pop());
+                Nodo op2 = new Nodo(operandos.Pop());
+                Nodo op1 = new Nodo(operandos.Pop());
+                op.addNodo(op1);
+                op.addNodo(op2);
+                actual.addNodo(op);
+            }
+            if (operadores.Count > 0 | operandos.Count > 0)
+            {
+                correcto = false;
+            }
+            else
+            {
+                correcto = true;
             }
         }
         //Clasifica un token dado como operador
