@@ -5,6 +5,7 @@
 //Fases del compilador
 using Lexico;
 using Sintactico;
+using Intermedio;
 
 using System.Collections;
 
@@ -64,6 +65,8 @@ namespace CompiladorPython
                 MessageBox.Show("Error en tipos");
             }
             analizadorSemantico.imprimirTipos();
+            Intermedio.Intermedio intermedio = new Intermedio.Intermedio();
+            intermedio.generar(arbol);
             //Muestra la tabla de tokens identificados
             tokensList.Visible = true;
             //Limpia la tabla
